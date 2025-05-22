@@ -4,11 +4,116 @@
 https://github.com/MuhammadAbiAM/BE-Jadwal-Skripsi <br>
 https://github.com/NalindraDT/Simon-kehadiran
 
-## Donwload DB
+Di file backend CI nale, ubah bagian create yang semula harus wwww agar menjadi json();
+```php
+public function create()
+    {
+        // PENTING: Mengambil data dari input JSON
+        // `getJSON(true)` akan mengembalikan body JSON sebagai array asosiatif.
+        $input = $this->request->getJSON(true);
+
+        // Periksa apakah input JSON valid dan tidak kosong
+        if ($input === null) {
+            return $this->fail("Invalid JSON input or empty body.", 400);
+        }
+
+        // Ambil data yang diperlukan dari array $input
+        $kode_kelas = $input['kode_kelas'] ?? null;
+        $nama_kelas = $input['nama_kelas'] ?? null;
+
+        // Validasi manual sebelum insertion
+        if (empty($kode_kelas) || empty($nama_kelas)) {
+            return $this->fail("Kode kelas dan nama kelas harus diisi.", 400);
+        }
+
+        // Cek keberadaan kode kelas menggunakan query builder
+        $existingKelas = $this->model->where('kode_kelas', $kode_kelas)->first();
+
+        if ($existingKelas) {
+            return $this->fail("Kode kelas sudah ada.", 409); // 409 Conflict jika kode sudah ada
+        }
+
+        // Data yang akan disimpan
+        $dataToSave = [
+            'kode_kelas' => $kode_kelas,
+            'nama_kelas' => $nama_kelas,
+        ];
+
+        // Validasi dan simpan data menggunakan model CodeIgniter
+        if ($this->model->save($dataToSave) === false) {
+            // Tangani kesalahan validasi model CodeIgniter
+            return $this->fail($this->model->errors(), 400);
+        }
+
+        return $this->respondCreated([
+            'status' => 201,
+            'messages' => ['success' => 'Berhasil memasukkan data kelas']
+        ]);
+    }
+```
+
+Di Backend Abi, hilangkan validasi kode_ruangan di function update karena tidak perlu.
+```php
+public function update($kode_ruangan = null)
+    {
+        $ruangan = $this->model->find($kode_ruangan);
+
+        if (!$ruangan) {
+            return $this->failNotFound('Data Ruangan tidak ditemukan.');
+        }
+
+        $rules = $this->validate([
+            // 'kode_ruangan' => [
+            //     'rules' => 'required|alpha_numeric_punct|min_length[3]|is_unique[ruangan.kode_ruangan,kode_ruangan,' . $kode_ruangan . ']',
+            //     'errors' => [
+            //         'required'              => 'Kode ruangan wajib diisi.',
+            //         'alpha_numeric_punct'   => 'Kode ruangan hanya boleh huruf, angka, spasi, dan tanda baca.',
+            //         'min_length'            => 'Kode ruangan minimal 3 karakter.',
+            //         'is_unique'             => 'Kode ruangan sudah terdaftar.',
+            //     ]
+            // ],
+            'nama_ruangan' => [
+                'rules' => 'required|alpha_space|min_length[3]',
+                'errors' => [
+                    'required'    => 'Nama ruangan wajib diisi.',
+                    'alpha_space' => 'Nama ruangan hanya boleh huruf dan spasi.',
+                    'min_length'  => 'Nama ruangan minimal 3 karakter.',
+                ]
+            ],
+        ]);
+
+        if (!$rules) {
+            $response = [
+                'message' => $this->validator->getErrors(),
+            ];
+            return $this->failValidationErrors($response);
+        }
+
+        $this->model->update($kode_ruangan, [
+            'nama_ruangan' => esc($this->request->getVar('nama_ruangan'))
+        ]);
+
+        $response = [
+            'message' => 'Data Ruangan Berhasil Diubah.',
+        ];
+        return $this->respondUpdated($response);
+    }
+```
+## !Catatan:
+Lakukan test di postman dulu, jika pengujian bisa dilakukan di www artinya format data tersebut berbentuk html biasa. Cek di CI Backend juga, Apabila berbentuk:
+1. $data = $this->request->getPost(['kode_kelas', 'nama_kelas']); <b>(INI BENTUK WWW, Controller FE make asForm)</b>
+2. $data = $this->request->getJSON(true) ?? $this->request->getRawInput(); <b>(INI BERBENTUK JSON, make yang Http::put(link-url)</b>
+
+### Donwload DB
 Buka file yang .sql <br>
 Salin semua query dan masukan ke sql database PhpMyAdmin <br>
 https://github.com/mayangm09/DBE-SI-Penjadwalan-Skripsi.git <br>
 https://github.com/JiRizkyCahyusna/DBE_Simon
+
+### Buat file laravel baru
+```
+composer create-project laravel/laravel namaProjek
+```
 
 ### Ganti isi .env di laravel kita
 ```
