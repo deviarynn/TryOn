@@ -1,13 +1,13 @@
 # SEFRUIT TUTORIAL DARI SAYA
 
 ## Clone repository backend
-https://github.com/MuhammadAbiAM/BE-Jadwal-Skripsi 
+https://github.com/MuhammadAbiAM/BE-Jadwal-Skripsi <br>
 https://github.com/NalindraDT/Simon-kehadiran
 
 ## Donwload DB
-Buka file yang .src
-Salin semua query dan masukan ke sql database PhpMyAdmin
-https://github.com/mayangm09/DBE-SI-Penjadwalan-Skripsi.git
+Buka file yang .src <br>
+Salin semua query dan masukan ke sql database PhpMyAdmin <br>
+https://github.com/mayangm09/DBE-SI-Penjadwalan-Skripsi.git <br>
 https://github.com/JiRizkyCahyusna/DBE_Simon
 
 ### Ganti isi .env di laravel kita
