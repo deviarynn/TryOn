@@ -100,7 +100,7 @@ public function update($kode_ruangan = null)
     }
 ```
 ## !Catatan:
-Lakukan test di postman dulu, jika pengujian bisa dilakukan di www artinya format data tersebut berbentuk html biasa. Cek di CI Backend juga, Apabila berbentuk:
+Lakukan test di postman dulu, jika pengujian bisa dilakukan di www artinya format data tersebut berbentuk html biasa. Jika bisa dilakukan di raw, maka berbentuk JSON, Cek di CI Backend juga, Apabila berbentuk:
 1. $data = $this->request->getPost(['kode_kelas', 'nama_kelas']); <b>(INI BENTUK WWW, Controller FE make asForm)</b>
 2. $data = $this->request->getJSON(true) ?? $this->request->getRawInput(); <b>(INI BERBENTUK JSON, make yang Http::put(link-url)</b>
 
