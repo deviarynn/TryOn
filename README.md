@@ -5,7 +5,7 @@ https://github.com/MuhammadAbiAM/BE-Jadwal-Skripsi <br>
 https://github.com/NalindraDT/Simon-kehadiran
 
 ## Donwload DB
-Buka file yang .src <br>
+Buka file yang .sql <br>
 Salin semua query dan masukan ke sql database PhpMyAdmin <br>
 https://github.com/mayangm09/DBE-SI-Penjadwalan-Skripsi.git <br>
 https://github.com/JiRizkyCahyusna/DBE_Simon
